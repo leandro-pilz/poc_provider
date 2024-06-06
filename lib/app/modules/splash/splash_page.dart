@@ -8,19 +8,40 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<SplashController>(context);
+    final controller = context.read<SplashController>();
 
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('SplashPage'),
-          ValueListenableBuilder(
-            valueListenable: controller,
-            builder: (BuildContext context, state, Widget? child) {
+          Selector<SplashController, UserState>(
+            shouldRebuild: (previous, next) {
+              return previous is UserLoadingState && next is UserGetSate;
+            },
+            selector: (_, state) => state.value,
+            builder: (_, state, __) {
+              return Text((state is UserGetSate)
+                  ? "Usuário logado: ${(controller.value as UserGetSate).user.name}"
+                  : "Usuário não está logado");
+            },
+          ),
+          // Consumer<SplashController>(
+          Selector<SplashController, UserState>(
+            shouldRebuild: (previous, next) {
+              return (previous is UserInitSate && next is UserLoadingState) ||
+                  (previous is UserLoadingState && next is UserTokenState);
+            },
+            selector: (_, state) => state.value,
+            builder: (_, state, __) {
+              if (state is UserTokenState) {
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  controller.getUser();
+                });
+              }
+
               return ElevatedButton(
-                onPressed: () {},
+                onPressed: () => controller.logIn(),
                 child: (state is UserLoadingState)
                     ? const CircularProgressIndicator()
                     : const Text('Entrar'),

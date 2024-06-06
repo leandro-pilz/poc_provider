@@ -8,18 +8,18 @@ class SplashController extends ValueNotifier<UserState> {
   UserEntity? _user;
   String? _token;
 
-  UserEntity? get use => _user;
-
   UserState get state => value;
 
   SplashController({required UserRepository userRepository})
       : _userRepository = userRepository,
         super(UserInitSate());
 
-  void _emit(UserState newState) => value = newState;
+  void _emit({required UserState state}) {
+    value = state;
+  }
 
-  void getUser() async {
-    _emit(UserLoadingState());
+  Future<void> getUser() async {
+    _emit(state: UserLoadingState());
 
     final userState = await _userRepository.getUser(token: _token ?? '');
 
@@ -27,18 +27,18 @@ class SplashController extends ValueNotifier<UserState> {
       _user = userState.user;
     }
 
-    _emit(userState);
+    _emit(state: userState);
   }
 
-  void logIn() async {
-    _emit(UserLoadingState());
+  Future<void> logIn() async {
+    _emit(state: UserLoadingState());
 
-    final userState = await _userRepository.login();
+    final userState = await _userRepository.logIn();
 
     if (userState is UserTokenState) {
       _token = userState.token;
     }
 
-    _emit(userState);
+    _emit(state: userState);
   }
 }

@@ -2,9 +2,25 @@ import 'package:poc_provider/core/entities/user_entity.dart';
 
 sealed class UserState {}
 
-final class UserInitSate extends UserState {}
+final class UserInitSate extends UserState {
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserInitSate && runtimeType == other.runtimeType;
 
-final class UserLoadingState extends UserState {}
+  @override
+  int get hashCode => -1;
+}
+
+final class UserLoadingState extends UserState {
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserLoadingState && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 0;
+}
 
 final class UserTokenState extends UserState {
   final String token;

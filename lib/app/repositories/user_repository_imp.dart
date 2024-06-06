@@ -9,7 +9,7 @@ final class UserRepositoryImp implements UserRepository {
   UserRepositoryImp({required Api api}) : _api = api;
 
   @override
-  Future<UserState> login() async {
+  Future<UserState> logIn() async {
     await _api.post();
     await Future.delayed(const Duration(milliseconds: 3000));
     return UserTokenState(token: '21721c48-abb1-4fe8-9830-d4f9d63b0e77');
