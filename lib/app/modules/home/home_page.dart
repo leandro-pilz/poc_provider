@@ -15,25 +15,32 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Filmes')),
-      body: Selector<HomeController, MovieState>(
-        selector: (_, movie) => movie.state,
-        builder: (_, state, __) {
-          return switch (state) {
-            MovieLoadingState() => const Center(child: CircularProgressIndicator()),
-            MovieErrorState() => Center(child: Text('Error ${state.error}')),
-            MovieGetState() => ListView.builder(
-                itemCount: state.movies.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('Título: ${state.movies[index].title}'),
-                    subtitle: Text('Descrição: ${state.movies[index].overview}'),
-                  );
-                },
-              ),
-            _ => const SizedBox.shrink(),
-          };
-        },
+      appBar: AppBar(
+        title: const Text('Filmes'),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+      ),
+      body: ColoredBox(
+        color: Colors.white,
+        child: Selector<HomeController, MovieState>(
+          selector: (_, movie) => movie.state,
+          builder: (_, state, __) {
+            return switch (state) {
+              MovieLoadingState() => const Center(child: CircularProgressIndicator()),
+              MovieErrorState() => Center(child: Text('Error ${state.error}')),
+              MovieGetState() => ListView.builder(
+                  itemCount: state.movies.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('Título: ${state.movies[index].title}'),
+                      subtitle: Text('Descrição: ${state.movies[index].overview}'),
+                    );
+                  },
+                ),
+              _ => const SizedBox.shrink(),
+            };
+          },
+        ),
       ),
     );
   }
