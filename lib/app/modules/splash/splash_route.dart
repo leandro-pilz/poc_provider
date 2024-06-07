@@ -4,7 +4,7 @@ import 'package:poc_provider/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
 class SplashRoute {
-  static Widget params({required BuildContext context}) {
+  static Widget params() {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SplashController>(
